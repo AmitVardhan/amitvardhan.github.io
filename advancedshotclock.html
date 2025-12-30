@@ -1,231 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Professional Shot Clock</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Professional Shot Clock</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
 
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* THEME VARIABLES */
+body.theme-matchroom {
+  --bg-main: radial-gradient(circle at center, #111 0%, #000 65%);
+  --panel-bg: rgba(0,0,0,0.4);
+  --glow-green: rgba(0,200,0,0.35);
+  --glow-yellow: rgba(255,255,100,0.45);
+  --glow-red: rgba(255,50,50,0.6);
+}
+body.theme-led {
+  --bg-main: radial-gradient(circle at center, #050505 0%, #000 70%);
+  --panel-bg: repeating-linear-gradient(
+    90deg,
+    rgba(0,0,0,0.8) 0px,
+    rgba(0,0,0,0.8) 2px,
+    rgba(255,255,255,0.02) 3px
+  );
+  --glow-green: rgba(0,255,0,0.7);
+  --glow-yellow: rgba(255,255,0,0.7);
+  --glow-red: rgba(255,0,0,0.85);
+}
+body.theme-calm {
+  --bg-main: #2b2b3a;
+  --panel-bg: rgba(50,50,60,0.4);
+  --glow-green: rgba(135,206,235,0.35);
+  --glow-yellow: rgba(255,213,128,0.35);
+  --glow-red: rgba(255,111,97,0.35);
+}
+body.theme-teal {
+  --bg-main: #1e3d3d;
+  --panel-bg: rgba(30,60,60,0.4);
+  --glow-green: rgba(135,255,200,0.45);
+  --glow-yellow: rgba(255,215,120,0.35);
+  --glow-red: rgba(255,100,90,0.5);
+}
 
-  <style>
-    :root {
-      --green: #00ff00;
-      --yellow: #ffff00;
-      --red: #ff0000;
-      --bg: #000000;
-    }
+/* BASE STYLES */
+* { box-sizing: border-box; user-select: none; }
+body {
+  margin:0;
+  min-height:100vh;
+  background: var(--bg-main);
+  font-family:'Orbitron', monospace;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding: 20px;
+}
 
-    * {
-      box-sizing: border-box;
-      user-select: none;
-    }
+/* TIMER PANEL */
+#timer {
+  font-size: clamp(120px, 30vw, 320px);
+  font-weight:700;
+  padding:25px 50px;
+  border-radius:16px;
+  background: var(--panel-bg);
+  text-align:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width: max-content;
+  min-width: 8ch;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.05), 0 25px 60px rgba(0,0,0,0.9);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+  word-break: break-word;
+}
 
-    body {
-      margin: 0;
-      height: 100vh;
-      background: var(--bg);
-      font-family: 'Orbitron', monospace;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: var(--green);
-    }
+/* LED DIGIT WITH SEGMENT FLICKER */
+.led-digit {
+  display:inline-block;
+  position:relative;
+  color:inherit;
+  text-shadow:inherit;
+}
+.led-digit::after {
+  content: attr(data-digit);
+  position:absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  opacity:0.1;
+  text-shadow: 0 0 2px rgba(255,255,255,0.3);
+  animation: flickerSegment 0.08s infinite alternate;
+}
+@keyframes flickerSegment {0%,100%{opacity:0.08;}50%{opacity:0.15;}}
 
-    #timer {
-      font-size: clamp(160px, 35vw, 320px);
-      font-weight: 700;
-      margin-bottom: 30px;
-      transition: color 0.3s ease, transform 0.3s ease;
-    }
+/* TIMER STATES */
+.timer-green { color: var(--glow-green); text-shadow:0 0 25px var(--glow-green);}
+.timer-yellow { color: var(--glow-yellow); text-shadow:0 0 25px var(--glow-yellow);}
+.timer-red { color: var(--glow-red); text-shadow:0 0 30px var(--glow-red);}
+.pulse { animation: pulse 1s infinite; }
+@keyframes pulse { 0%{transform:scale(1);}50%{transform:scale(1.04);}100%{transform:scale(1);} }
 
-    #controls {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+/* CONTROLS */
+#controls{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:30px;
+  padding-top:20px;
+  border-top:1px solid rgba(255,255,255,0.08);
+}
+button, select {
+  font-family:inherit;
+  font-size:18px;
+  padding:10px 22px;
+  color:#00ff00;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(0,0,0,0.4));
+  border:2px solid #00ff00;
+  border-radius:6px;
+  cursor:pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.15),0 6px 14px rgba(0,0,0,0.8);
+  transition: color 0.2s, background 0.2s, border-color 0.2s;
+}
+button:hover, select:hover{ background:#00ff00; color:#000; }
+#autoBtn.active{ background:#ff4444;border-color:#ff4444;color:#000;box-shadow:0 0 25px rgba(255,68,68,0.8);}
 
-    button, select {
-      font-family: inherit;
-      font-size: 20px;
-      padding: 12px 28px;
-      background: transparent;
-      color: var(--green);
-      border: 2px solid var(--green);
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease;
-    }
+/* FOOTER */
+footer{
+  margin-top:auto;
+  padding:12px 0;
+  color: #999;
+  font-size:14px;
+  text-align:center;
+  font-family: 'Orbitron', monospace;
+  width:100%;
+}
 
-    button:hover, select:hover {
-      background: var(--green);
-      color: #000;
-    }
-
-    button:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-      100% { transform: scale(1); }
-    }
-
-    .pulse {
-      animation: pulse 1s infinite;
-    }
-  </style>
+/* RESPONSIVE ADJUSTMENTS */
+@media(max-width:600px){
+  #timer{ font-size: clamp(80px, 25vw, 200px); padding: 15px 30px; }
+  button, select{ font-size:16px; padding:8px 18px;}
+}
+</style>
 </head>
-<body>
+<body class="theme-teal">
 
-  <div id="timer">30</div>
+<div id="timer" class="timer-green">30</div>
 
-  <div id="controls">
-    <button id="startBtn">Start Shot</button>
-    <button id="stopBtn">Stop</button>
-    <button id="extendBtn">Extension</button>
-    <select id="presetSelect">
-      <option value="matchroom">Matchroom (30 + 30)</option>
-      <option value="matchroom-fast">Matchroom Fast (25 + 25)</option>
-      <option value="practice">Practice (60)</option>
-    </select>
-  </div>
+<div id="controls">
+<button id="startBtn">Start Shot</button>
+<button id="stopBtn">Stop</button>
+<button id="extendBtn">Extension</button>
+<button id="autoBtn">AutoPlay</button>
 
-  <script>
-    /* =============================
-       CONFIGURATION PRESETS
-    ============================== */
-    const PRESETS = {
-      matchroom: {
-        label: 'Matchroom (30 + 30)',
-        shotTime: 30,
-        extensionTime: 30,
-        warningTime: 5
-      },
-      'matchroom-fast': {
-        label: 'Matchroom Fast (25 + 25)',
-        shotTime: 25,
-        extensionTime: 25,
-        warningTime: 5
-      },
-      practice: {
-        label: 'Practice (60)',
-        shotTime: 60,
-        extensionTime: 0,
-        warningTime: 10
-      }
-    };
+<select id="presetSelect">
+<option value="matchroom">Matchroom</option>
+<option value="matchroom-fast">Matchroom Fast</option>
+<option value="practice">Practice</option>
+</select>
 
-    /* =============================
-       STATE
-    ============================== */
-    let currentPreset = PRESETS.matchroom;
-    let endTime = null;
-    let rafId = null;
-    let extensionUsed = false;
-    let running = false;
+<select id="themeSelect">
+<option value="theme-led">LED Hardware</option>
+<option value="theme-matchroom">Matchroom Pro</option>
+<option value="theme-calm">Calm Blue</option>
+<option value="theme-teal" selected>Teal Relaxed</option>
+</select>
+</div>
 
-    /* =============================
-       ELEMENTS
-    ============================== */
-    const timerEl = document.getElementById('timer');
-    const startBtn = document.getElementById('startBtn');
-    const stopBtn = document.getElementById('stopBtn');
-    const extendBtn = document.getElementById('extendBtn');
-    const presetSelect = document.getElementById('presetSelect');
+<!-- AUDIO -->
+<audio id="beep10" src="assets/audio/beep10.wav" preload="auto"></audio>
+<audio id="beep5" src="assets/audio/beep5.wav" preload="auto"></audio>
+<audio id="beep0" src="assets/audio/beep0.wav" preload="auto"></audio>
 
-    /* =============================
-       AUDIO (simple beep)
-    ============================== */
-    const beep = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=');
+<!-- FOOTER -->
+<footer>© 2025 Amit Vardhan. All rights reserved.</footer>
 
-    /* =============================
-       CORE FUNCTIONS
-    ============================== */
-    function startShot() {
-      endTime = Date.now() + currentPreset.shotTime * 1000;
-      extensionUsed = false;
-      extendBtn.disabled = currentPreset.extensionTime === 0;
-      running = true;
-      tick();
-    }
+<script>
+const themeSelect=document.getElementById('themeSelect');
+themeSelect.addEventListener('change',e=>{document.body.className=e.target.value;});
 
-    function stopShot() {
-      running = false;
-      cancelAnimationFrame(rafId);
-    }
+const timerEl=document.getElementById('timer');
+const startBtn=document.getElementById('startBtn');
+const stopBtn=document.getElementById('stopBtn');
+const extendBtn=document.getElementById('extendBtn');
+const autoBtn=document.getElementById('autoBtn');
+const presetSelect=document.getElementById('presetSelect');
+const beep10=document.getElementById('beep10');
+const beep5=document.getElementById('beep5');
+const beep0=document.getElementById('beep0');
 
-    function useExtension() {
-      if (extensionUsed || !running) return;
-      endTime = Date.now() + currentPreset.extensionTime * 1000;
-      extensionUsed = true;
-      extendBtn.disabled = true;
-    }
+const PRESETS={matchroom:{shotTime:30,extensionTime:30,warningTime:5},'matchroom-fast':{shotTime:25,extensionTime:25,warningTime:5},practice:{shotTime:60,extensionTime:0,warningTime:10}};
 
-    function tick() {
-      if (!running) return;
+let currentPreset=PRESETS.matchroom;
+let endTime=null,rafId=null,running=false,extensionUsed=false,lastSecondPlayed=null,autoPlay=false,audioUnlocked=false;
 
-      const remainingMs = endTime - Date.now();
-      const seconds = Math.max(0, Math.ceil(remainingMs / 1000));
+function unlockAudio(){if(audioUnlocked)return; beep5.play().then(()=>{ beep5.pause(); beep5.currentTime=0; audioUnlocked=true; }).catch(()=>{});}
+startBtn.addEventListener('click',unlockAudio,{once:true});
+autoBtn.addEventListener('click',unlockAudio,{once:true});
 
-      timerEl.textContent = seconds;
-      updateVisuals(seconds);
+function startShot(){ lastSecondPlayed=null; extensionUsed=false; extendBtn.disabled=currentPreset.extensionTime===0; endTime=Date.now()+currentPreset.shotTime*1000; running=true; tick();}
+function stopShot(){ running=false; cancelAnimationFrame(rafId);}
+function useExtension(){ if(!running||extensionUsed)return; extensionUsed=true; endTime=Date.now()+currentPreset.extensionTime*1000; extendBtn.disabled=true;}
 
-      if (seconds === currentPreset.warningTime) beep.play();
+function tick(){
+  if(!running) return;
+  const remainingMs=endTime-Date.now();
+  const seconds=Math.max(0,Math.floor(remainingMs/1000));
 
-      if (remainingMs <= 0) {
-        running = false;
-        beep.play();
-        return;
-      }
+  timerEl.innerHTML=seconds.toString().split('').map(d=>`<span class="led-digit" data-digit="${d}">${d}</span>`).join('');
 
-      rafId = requestAnimationFrame(tick);
-    }
+  timerEl.classList.remove('pulse','timer-green','timer-yellow','timer-red');
+  if(seconds<=0){ timerEl.classList.add('timer-red'); }
+  else if(seconds<=5){ timerEl.classList.add('timer-yellow','pulse'); }
+  else{ timerEl.classList.add('timer-green'); }
 
-    function updateVisuals(seconds) {
-      timerEl.classList.remove('pulse');
+  if(seconds===10 && lastSecondPlayed!==10){ beep10.currentTime=0; beep10.play(); lastSecondPlayed=10;}
+  if(seconds<=5 && seconds>0 && lastSecondPlayed!==seconds){ beep5.currentTime=0; beep5.play(); lastSecondPlayed=seconds;}
+  if(seconds===0 && lastSecondPlayed!==0){ beep0.currentTime=0; beep0.play(); lastSecondPlayed=0; running=false; if(autoPlay)setTimeout(startShot,600); return;}
 
-      if (seconds <= currentPreset.warningTime) {
-        timerEl.style.color = 'var(--red)';
-        timerEl.classList.add('pulse');
-      } else if (seconds <= currentPreset.warningTime * 2) {
-        timerEl.style.color = 'var(--yellow)';
-      } else {
-        timerEl.style.color = 'var(--green)';
-      }
-    }
+  rafId=requestAnimationFrame(tick);
+}
 
-    function applyPreset(key) {
-      currentPreset = PRESETS[key];
-      stopShot();
-      timerEl.textContent = currentPreset.shotTime;
-      timerEl.style.color = 'var(--green)';
-      extendBtn.disabled = currentPreset.extensionTime === 0;
-    }
+function applyPreset(key){ currentPreset=PRESETS[key]; autoPlay=false; autoBtn.textContent='AutoPlay'; stopShot(); timerEl.textContent=currentPreset.shotTime; timerEl.classList.remove('pulse','timer-red','timer-yellow','timer-green'); timerEl.classList.add('timer-green'); extendBtn.disabled=currentPreset.extensionTime===0;}
 
-    /* =============================
-       EVENTS
-    ============================== */
-    startBtn.addEventListener('click', startShot);
-    stopBtn.addEventListener('click', stopShot);
-    extendBtn.addEventListener('click', useExtension);
+startBtn.addEventListener('click',startShot);
+stopBtn.addEventListener('click',()=>{autoPlay=false; autoBtn.textContent='AutoPlay'; stopShot();});
+extendBtn.addEventListener('click',useExtension);
+autoBtn.addEventListener('click',()=>{ autoPlay=!autoPlay; autoBtn.textContent=autoPlay?'Stop':'AutoPlay'; if(autoPlay && !running)startShot(); });
+presetSelect.addEventListener('change',e=>applyPreset(e.target.value));
+document.body.addEventListener('dblclick',()=>{document.documentElement.requestFullscreen?.();});
 
-    presetSelect.addEventListener('change', (e) => {
-      applyPreset(e.target.value);
-    });
-
-    document.body.addEventListener('dblclick', () => {
-      document.documentElement.requestFullscreen?.();
-    });
-
-    /* =============================
-       INIT
-    ============================== */
-    applyPreset('matchroom');
-  </script>
+applyPreset('matchroom');
+</script>
 </body>
 </html>
