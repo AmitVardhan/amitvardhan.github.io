@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Professional Shot Clock</title>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green: #00ff00;
+      --yellow: #ffff00;
+      --red: #ff0000;
+      --bg: #000000;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: var(--bg);
+      font-family: 'Orbitron', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--green);
+    }
+
+    #timer {
+      font-size: clamp(160px, 35vw, 320px);
+      font-weight: 700;
+      margin-bottom: 30px;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    #controls {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button, select {
+      font-family: inherit;
+      font-size: 20px;
+      padding: 12px 28px;
+      background: transparent;
+      color: var(--green);
+      border: 2px solid var(--green);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    button:hover, select:hover {
+      background: var(--green);
+      color: #000;
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    .pulse {
+      animation: pulse 1s infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="timer">30</div>
+
+  <div id="controls">
+    <button id="startBtn">Start Shot</button>
+    <button id="stopBtn">Stop</button>
+    <button id="extendBtn">Extension</button>
+    <select id="presetSelect">
+      <option value="matchroom">Matchroom (30 + 30)</option>
+      <option value="matchroom-fast">Matchroom Fast (25 + 25)</option>
+      <option value="practice">Practice (60)</option>
+    </select>
+  </div>
+
+  <script>
+    /* =============================
+       CONFIGURATION PRESETS
+    ============================== */
+    const PRESETS = {
+      matchroom: {
+        label: 'Matchroom (30 + 30)',
+        shotTime: 30,
+        extensionTime: 30,
+        warningTime: 5
+      },
+      'matchroom-fast': {
+        label: 'Matchroom Fast (25 + 25)',
+        shotTime: 25,
+        extensionTime: 25,
+        warningTime: 5
+      },
+      practice: {
+        label: 'Practice (60)',
+        shotTime: 60,
+        extensionTime: 0,
+        warningTime: 10
+      }
+    };
+
+    /* =============================
+       STATE
+    ============================== */
+    let currentPreset = PRESETS.matchroom;
+    let endTime = null;
+    let rafId = null;
+    let extensionUsed = false;
+    let running = false;
+
+    /* =============================
+       ELEMENTS
+    ============================== */
+    const timerEl = document.getElementById('timer');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const extendBtn = document.getElementById('extendBtn');
+    const presetSelect = document.getElementById('presetSelect');
+
+    /* =============================
+       AUDIO (simple beep)
+    ============================== */
+    const beep = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=');
+
+    /* =============================
+       CORE FUNCTIONS
+    ============================== */
+    function startShot() {
+      endTime = Date.now() + currentPreset.shotTime * 1000;
+      extensionUsed = false;
+      extendBtn.disabled = currentPreset.extensionTime === 0;
+      running = true;
+      tick();
+    }
+
+    function stopShot() {
+      running = false;
+      cancelAnimationFrame(rafId);
+    }
+
+    function useExtension() {
+      if (extensionUsed || !running) return;
+      endTime = Date.now() + currentPreset.extensionTime * 1000;
+      extensionUsed = true;
+      extendBtn.disabled = true;
+    }
+
+    function tick() {
+      if (!running) return;
+
+      const remainingMs = endTime - Date.now();
+      const seconds = Math.max(0, Math.ceil(remainingMs / 1000));
+
+      timerEl.textContent = seconds;
+      updateVisuals(seconds);
+
+      if (seconds === currentPreset.warningTime) beep.play();
+
+      if (remainingMs <= 0) {
+        running = false;
+        beep.play();
+        return;
+      }
+
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function updateVisuals(seconds) {
+      timerEl.classList.remove('pulse');
+
+      if (seconds <= currentPreset.warningTime) {
+        timerEl.style.color = 'var(--red)';
+        timerEl.classList.add('pulse');
+      } else if (seconds <= currentPreset.warningTime * 2) {
+        timerEl.style.color = 'var(--yellow)';
+      } else {
+        timerEl.style.color = 'var(--green)';
+      }
+    }
+
+    function applyPreset(key) {
+      currentPreset = PRESETS[key];
+      stopShot();
+      timerEl.textContent = currentPreset.shotTime;
+      timerEl.style.color = 'var(--green)';
+      extendBtn.disabled = currentPreset.extensionTime === 0;
+    }
+
+    /* =============================
+       EVENTS
+    ============================== */
+    startBtn.addEventListener('click', startShot);
+    stopBtn.addEventListener('click', stopShot);
+    extendBtn.addEventListener('click', useExtension);
+
+    presetSelect.addEventListener('change', (e) => {
+      applyPreset(e.target.value);
+    });
+
+    document.body.addEventListener('dblclick', () => {
+      document.documentElement.requestFullscreen?.();
+    });
+
+    /* =============================
+       INIT
+    ============================== */
+    applyPreset('matchroom');
+  </script>
+</body>
+</html>
