@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shot Clock</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #000000;
+      font-family: 'Orbitron', monospace, sans-serif;
+      color: #00ff00;
+    }
+    #timer {
+      font-size: 300px;
+      font-weight: 800;
+      margin-bottom: 40px;
+      color: #00ff00; /* solid green */
+      text-shadow: none; /* no glow */
+    }
+    .btn {
+      font-family: 'Orbitron', monospace, sans-serif;
+      font-size: 24px;
+      padding: 10px 30px;
+      cursor: pointer;
+      border: 2px solid #00ff00;
+      border-radius: 5px;
+      background-color: #000000;
+      color: #00ff00;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      box-shadow: none;
+      margin: 0 10px;
+    }
+    .btn:hover {
+      background-color: #00ff00;
+      color: #000000;
+      box-shadow: none;
+    }
+    #buttons-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="timer">30</div>
+  <div id="buttons-container">
+    <button id="stopBtn" class="btn">Stop</button>
+    <button id="extendBtn" class="btn">Extension</button>
+  </div>
+
+  <script>
+    let timeLeft = 30;
+    const timerElem = document.getElementById('timer');
+    const stopBtn = document.getElementById('stopBtn');
+    const extendBtn = document.getElementById('extendBtn');
+    let intervalId = null;
+    let running = true;
+
+    function startCountdown() {
+      timerElem.textContent = timeLeft;
+      intervalId = setInterval(() => {
+        if (!running) return;
+        timeLeft--;
+        if (timeLeft < 0) {
+          timeLeft = 30;
+        }
+        timerElem.textContent = timeLeft;
+      }, 1000);
+    }
+
+    stopBtn.addEventListener('click', () => {
+      running = false;
+      clearInterval(intervalId);
+    });
+
+    extendBtn.addEventListener('click', () => {
+      if (running) {
+        timeLeft += 30;
+        timerElem.textContent = timeLeft;
+      }
+    });
+
+    startCountdown();
+  </script>
+</body>
+</html>
