@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Shot Clock</title>
+  <title>BasicShot Clock</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
@@ -18,13 +19,17 @@
       font-family: 'Orbitron', monospace, sans-serif;
       color: #00ff00;
     }
+
     #timer {
       font-size: 300px;
       font-weight: 800;
       margin-bottom: 40px;
-      color: #00ff00; /* solid green */
-      text-shadow: none; /* no glow */
+      color: #00ff00;
+      /* solid green */
+      text-shadow: none;
+      /* no glow */
     }
+
     .btn {
       font-family: 'Orbitron', monospace, sans-serif;
       font-size: 24px;
@@ -38,11 +43,13 @@
       box-shadow: none;
       margin: 0 10px;
     }
+
     .btn:hover {
       background-color: #00ff00;
       color: #000000;
       box-shadow: none;
     }
+
     #buttons-container {
       display: flex;
       justify-content: center;
@@ -50,12 +57,15 @@
     }
   </style>
 </head>
+
 <body>
   <div id="timer">30</div>
   <div id="buttons-container">
     <button id="stopBtn" class="btn">Stop</button>
     <button id="extendBtn" class="btn">Extension</button>
   </div>
+
+  <footer>© 2025 Amit Vardhan. All rights reserved.</footer>
 
   <script>
     let timeLeft = 30;
@@ -92,4 +102,5 @@
     startCountdown();
   </script>
 </body>
+
 </html>
