@@ -1,182 +1,614 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="dark">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Clean Blog - Start Bootstrap Theme</title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Font Awesome icons (free version)-->
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet"
-        type="text/css" />
-    <link
-        href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
-        rel="stylesheet" type="text/css" />
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0xARCH Technical Blog & Architecture Blueprints</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f19',
+                        darkCard: '#131c2e',
+                        darkBorder: '#1e293b'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        code, pre { font-family: 'Fira Code', monospace; }
+        .transition-theme { transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+    </style>
 </head>
+<body class="bg-slate-50 text-slate-800 dark:bg-[#0b0f19] dark:text-slate-100 transition-theme min-h-screen flex flex-col">
 
-<body>
-    <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="index.html">Amit Vardhan</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
-                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                Menu
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="about.html">About</a></li>
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="post.html">Sample Post</a></li>
-
-                    <!-- Pool Dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle px-lg-3 py-3 py-lg-4" href="#" id="poolDropdown"
-                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Pool
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="poolDropdown">
-                            <li><a class="dropdown-item" href="shotclock.html">Pool Shot Clock</a></li>
-                            <li><a class="dropdown-item" href="advancedshotclock.html">Advanced Shot Clock</a></li>
-                            <li><a class="dropdown-item" href="nineballscore.html">Nine Ball Score</a></li>
-                            <li><a class="dropdown-item" href="preshotroutine.html">Pre Shot Routine</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="contact.html">Contact</a></li>
-                </ul>
-
-            </div>
-        </div>
-    </nav>
-    <!-- Page Header-->
-    <header class="masthead" style="background-image: url('assets/img/home-bg.jpg')">
-        <div class="container position-relative px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-7">
-                    <div class="site-heading">
-                        <h1>Clean Blog</h1>
-                        <span class="subheading">A Blog Theme by Start Bootstrap</span>
-                    </div>
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-[#131c2e]/80 border-b border-slate-200 dark:border-slate-800 transition-theme">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-indigo-500/20">
+                    0x
                 </div>
+                <span class="font-bold text-xl tracking-tight bg-gradient-to-r from-indigo-600 to-violet-500 bg-clip-text text-transparent">
+                    0xARCH
+                </span>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <button onclick="switchTab('blog')" id="nav-blog" class="text-indigo-600 dark:text-indigo-400 font-semibold transition-colors">Articles</button>
+                <button onclick="switchTab('mindmap')" id="nav-mindmap" class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Architecture Blueprints</button>
+                <button onclick="switchTab('interactive')" id="nav-interactive" class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Playground</button>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <!-- Sun Icon (shown in dark mode) -->
+                    <svg id="theme-icon-sun" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <!-- Moon Icon (shown in light mode) -->
+                    <svg id="theme-icon-moon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+                </button>
+                <button onclick="switchTab('mindmap')" class="hidden sm:inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md shadow-indigo-500/20 transition-all">
+                    Explore Blueprints
+                </button>
             </div>
         </div>
     </header>
-    <!-- Main Content-->
-    <div class="container px-4 px-lg-5">
-        <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-7">
-                <!-- Post preview-->
-                <div class="post-preview">
-                    <a href="post.html">
-                        <h2 class="post-title">Man must explore, and this is exploration at its greatest</h2>
-                        <h3 class="post-subtitle">Problems look mighty small from 150 miles up</h3>
-                    </a>
-                    <p class="post-meta">
-                        Posted by
-                        <a href="#!">Start Bootstrap</a>
-                        on September 24, 2023
-                    </p>
-                </div>
-                <!-- Divider-->
-                <hr class="my-4" />
-                <!-- Post preview-->
-                <div class="post-preview">
-                    <a href="post.html">
-                        <h2 class="post-title">I believe every human has a finite number of heartbeats. I don't intend
-                            to waste any of mine.</h2>
-                    </a>
-                    <p class="post-meta">
-                        Posted by
-                        <a href="#!">Start Bootstrap</a>
-                        on September 18, 2023
-                    </p>
-                </div>
-                <!-- Divider-->
-                <hr class="my-4" />
-                <!-- Post preview-->
-                <div class="post-preview">
-                    <a href="post.html">
-                        <h2 class="post-title">Science has not yet mastered prophecy</h2>
-                        <h3 class="post-subtitle">We predict too much for the next year and yet far too little for the
-                            next ten.</h3>
-                    </a>
-                    <p class="post-meta">
-                        Posted by
-                        <a href="#!">Start Bootstrap</a>
-                        on August 24, 2023
-                    </p>
-                </div>
-                <!-- Divider-->
-                <hr class="my-4" />
-                <!-- Post preview-->
-                <div class="post-preview">
-                    <a href="post.html">
-                        <h2 class="post-title">Failure is not an option</h2>
-                        <h3 class="post-subtitle">Many say exploration is part of our destiny, but it’s actually our
-                            duty to future generations.</h3>
-                    </a>
-                    <p class="post-meta">
-                        Posted by
-                        <a href="#!">Start Bootstrap</a>
-                        on July 8, 2023
-                    </p>
-                </div>
-                <!-- Divider-->
-                <hr class="my-4" />
-                <!-- Pager-->
-                <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older
-                        Posts →</a></div>
-            </div>
-        </div>
-    </div>
-    <!-- Footer-->
-    <footer class="border-top">
-        <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-7">
-                    <ul class="list-inline text-center">
-                        <li class="list-inline-item">
-                            <a href="#!">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fas fa-circle fa-stack-2x"></i>
-                                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#!">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fas fa-circle fa-stack-2x"></i>
-                                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#!">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fas fa-circle fa-stack-2x"></i>
-                                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="small text-center text-muted fst-italic">Copyright &copy; Amit Vardhan 2026</div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="js/scripts.js"></script>
-</body>
 
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- BLOG TAB -->
+        <section id="tab-blog" class="space-y-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-full">Engineering & Architecture</span>
+                <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">Scalable Systems & Distributed Patterns</h1>
+                <p class="text-lg text-slate-600 dark:text-slate-400">Deep dives into modern system design, microservices patterns, event-driven architectures, and high-performance backend engineering.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
+                <!-- Article Card 1 -->
+                <article class="bg-white dark:bg-[#131c2e] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                            <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg font-medium">Distributed Systems</span>
+                            <span>8 min read</span>
+                        </div>
+                        <h2 class="text-xl font-bold tracking-tight hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer">Designing Event-Driven Microservices with Kafka</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-3">Explore patterns for reliable event choreography, idempotency handling, and distributed transaction management using outbox patterns.</p>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Oct 14, 2026</span>
+                        <button onclick="switchTab('mindmap')" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">View Blueprint &rarr;</button>
+                    </div>
+                </article>
+
+                <!-- Article Card 2 -->
+                <article class="bg-white dark:bg-[#131c2e] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                            <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg font-medium">Cloud Native</span>
+                            <span>12 min read</span>
+                        </div>
+                        <h2 class="text-xl font-bold tracking-tight hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer">Zero Trust Architecture in Kubernetes Clusters</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-3">Implementing mTLS, SPIFFE/SPIRE identity attestation, and fine-grained network policies across multi-tenant clusters.</p>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Oct 02, 2026</span>
+                        <button onclick="switchTab('mindmap')" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">View Blueprint &rarr;</button>
+                    </div>
+                </article>
+
+                <!-- Article Card 3 -->
+                <article class="bg-white dark:bg-[#131c2e] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                            <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg font-medium">Database Internals</span>
+                            <span>10 min read</span>
+                        </div>
+                        <h2 class="text-xl font-bold tracking-tight hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer">LSM-Trees vs B-Trees in Modern Storage Engines</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-3">A deep architectural comparison of write amplification, read latency, and compaction strategies in high-throughput database systems.</p>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Sep 24, 2026</span>
+                        <button onclick="switchTab('mindmap')" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">View Blueprint &rarr;</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- MIND MAP TAB -->
+        <section id="tab-mindmap" class="hidden space-y-6">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold tracking-tight">Architecture Design Pattern Mind Map</h2>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Interactive node graph of core distributed systems and design paradigms.</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="resetMindmap()" class="px-3.5 py-2 text-xs font-medium bg-white dark:bg-[#131c2e] border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">Reset View</button>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-[#131c2e] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm relative overflow-hidden h-[600px] flex flex-col items-center justify-center">
+                <!-- Interactive Mindmap canvas simulation -->
+                <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] opacity-60"></div>
+                
+                <div class="relative z-10 w-full h-full flex flex-col items-center justify-center space-y-12">
+                    <div class="px-6 py-3 rounded-2xl bg-indigo-600 text-white font-bold shadow-lg shadow-indigo-500/20 text-center">
+                        Distributed Architecture Core
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-4xl px-4">
+                        <div onclick="selectMindmapNode('event')" class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-indigo-500 transition-all space-y-2">
+                            <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">Pattern 01</span>
+                            <h3 class="font-bold text-sm">Event-Driven / Kafka</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Asynchronous messaging, outbox pattern, pub-sub architectures.</p>
+                        </div>
+                        <div onclick="selectMindmapNode('resilience')" class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-indigo-500 transition-all space-y-2">
+                            <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">Pattern 02</span>
+                            <h3 class="font-bold text-sm">Resilience & Circuit Breaker</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Bulkhead isolation, retries with jitter, graceful degradation.</p>
+                        </div>
+                        <div onclick="selectMindmapNode('storage')" class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-indigo-500 transition-all space-y-2">
+                            <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">Pattern 03</span>
+                            <h3 class="font-bold text-sm">CQRS & Event Sourcing</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Separating read/write models, append-only event logs.</p>
+                        </div>
+                    </div>
+
+                    <div id="mindmap-detail" class="w-full max-w-xl p-4 rounded-xl bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 text-center">
+                        Click any architecture pattern node above to inspect its properties and blueprint specs.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERACTIVE PLAYGROUND TAB -->
+        <section id="tab-interactive" class="hidden space-y-6">
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="text-center space-y-2">
+                    <h2 class="text-2xl font-bold tracking-tight">System Configuration Simulator</h2>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Test throughput calculations and rate limiter configurations in real time.</p>
+                </div>
+
+                <div class="bg-white dark:bg-[#131c2e] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-6">
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium">Target Requests / Sec (RPS)</label>
+                        <input type="range" id="sim-rps" min="100" max="10000" step="100" value="2500" oninput="updateSim()" class="w-full accent-indigo-600">
+                        <div class="flex justify-between text-xs text-slate-500">
+                            <span>100 RPS</span>
+                            <span id="sim-rps-val" class="font-bold text-indigo-600 dark:text-indigo-400">2,500 RPS</span>
+                            <span>10,000 RPS</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 space-y-1">
+                            <span class="text-xs text-slate-500">Estimated Bandwidth</span>
+                            <p id="sim-bw" class="text-lg font-bold">12.5 MB/s</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 space-y-1">
+                            <span class="text-xs text-slate-500">Recommended Shards</span>
+                            <p id="sim-shards" class="text-lg font-bold">4 Nodes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500 dark:text-slate-400 transition-theme">
+        <p>&copy; 2026 0xARCH Technical Blog & Architecture Blueprints. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Tab / Navigation Switching Function
+        function switchTab(tabName) {
+            const tabs = ['blog', 'mindmap', 'interactive'];
+            tabs.forEach(t => {
+                const section = document.getElementById(`tab-${t}`);
+                const navBtn = document.getElementById(`nav-${t}`);
+                if (t === tabName) {
+                    if (section) section.classList.remove('hidden');
+                    if (navBtn) {
+                        navBtn.className = 'text-indigo-600 dark:text-indigo-400 font-semibold transition-colors';
+                    }
+                } else {
+                    if (section) section.classList.add('hidden');
+                    if (navBtn) {
+                        navBtn.className = 'text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors';
+                    }
+                }
+            });
+
+            // Trigger mindmap render when switching to mindmap tab
+            if (tabName === 'mindmap' && typeof renderMindMap === 'function') {
+                setTimeout(() => renderMindMap(), 50);
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Alias navigateTo to switchTab for backwards compatibility
+        function navigateTo(tabName) {
+            switchTab(tabName);
+        }
+
+        // Initialize Theme from localStorage or system preference
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        // Toggle Theme Function
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        const decisionTreeData = [
+            {
+                category: "Creational",
+                badgeClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30",
+                borderClass: "border-emerald-500/30",
+                headerBg: "bg-emerald-950/20",
+                icon: "sparkles",
+                title: "Object creation becoming complicated?",
+                subBranches: [
+                    {
+                        question: "Need to hide concrete class instantiation or delegate creation?",
+                        children: [
+                            {
+                                name: "Factory Method",
+                                signal: "Code using `new ConcreteProduct()` scattered across business logic or massive switch statements checking enums/configs.",
+                                problem: "Creation logic is tied to concrete classes, making it hard to extend object creation without modifying existing client code.",
+                                tradeoffs: "Pros: Decouples client code. Cons: Forces subclassing or factory delegates; increases class count.",
+                                csharpNote: "In modern .NET, often superseded by DI containers and factory delegates (`Func<T>`).",
+                                code: `// C# Factory Method Example\npublic interface IReport\n{\n    void Generate();\n}\n\npublic abstract class ReportCreator\n{\n    public abstract IReport CreateReport();\n    public void Render() {\n        var report = CreateReport();\n        report.Generate();\n    }\n}`
+                            },
+                            {
+                                name: "Abstract Factory",
+                                signal: "Need to guarantee that a set of instantiated objects work together harmoniously (e.g., Windows vs Mac UI themes).",
+                                problem: "Clients need to create families of related or dependent objects without hardcoding their concrete classes.",
+                                tradeoffs: "Pros: Ensures product consistency. Cons: Extremely rigid; adding a new product type requires changing the abstract factory and all subclasses.",
+                                csharpNote: "Common in cross-platform rendering engines or abstracted multi-database providers.",
+                                code: `// C# Abstract Factory Example\npublic interface IGUIFactory\n{\n    IButton CreateButton();\n    ICheckbox CreateCheckbox();\n}`
+                            }
+                        ]
+                    },
+                    {
+                        question: "Object requires step-by-step assembly or has massive optional parameters?",
+                        children: [
+                            {
+                                name: "Builder",
+                                signal: "Class constructor has 6+ parameters (many nullable/optional) or object construction requires sequential phases.",
+                                problem: "Telescoping constructors make code unreadable and error-prone when dealing with complex optional configurations.",
+                                tradeoffs: "Pros: Readability, immutable final objects, fluent APIs. Cons: Requires writing/maintaining separate builder class or record `with` expressions.",
+                                csharpNote: "Extensively used in C# via Fluent APIs (`HttpClientBuilder`, `WebApplicationBuilder`).",
+                                code: `// C# Builder Example\nvar request = new HttpRequestBuilder()\n    .WithUrl("https://api.com")\n    .WithTimeout(TimeSpan.FromSeconds(30))\n    .Build();`
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                category: "Structural",
+                badgeClass: "bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/30",
+                borderClass: "border-sky-500/30",
+                headerBg: "bg-sky-950/20",
+                icon: "layers",
+                title: "Structural integration & class organization issues?",
+                subBranches: [
+                    {
+                        question: "Integrating a legacy or third-party class with an incompatible interface?",
+                        children: [
+                            {
+                                name: "Adapter",
+                                signal: "You have a `ThirdPartyClient` with `MakeCharge()` but your codebase expects `IPaymentProcessor.ProcessPayment()`.",
+                                problem: "An existing class or third-party library doesn't match what your domain code expects.",
+                                tradeoffs: "Pros: Reusability without modifying legacy code. Cons: Adds an extra indirection layer and boilerplate wrapper classes.",
+                                csharpNote: "Common when integrating legacy WCF services or external REST wrappers.",
+                                code: `// C# Adapter Example\npublic class StripeAdapter : IPaymentProcessor\n{\n    private readonly StripeClient _stripe;\n    public void ProcessPayment(PaymentRequest req) => _stripe.Charge(req.Amount);\n}`
+                            },
+                            {
+                                name: "Decorator",
+                                signal: "You find yourself writing subclasses like `LoggedCachedSecuredRepository` for every combination.",
+                                problem: "Adding responsibilities to individual objects statically via subclassing creates an unmaintainable class explosion.",
+                                tradeoffs: "Pros: Highly composable behaviors adhering to Open/Closed Principle. Cons: Debugging deep wrapper stacks is painful.",
+                                csharpNote: "Widely used in ASP.NET Core middleware, Scrutor service decoration, and stream wrappers.",
+                                code: `// C# Decorator Example\npublic class CachedUserRepository : IUserRepository\n{\n    private readonly IUserRepository _inner;\n    private readonly IMemoryCache _cache;\n    // Wraps execution with caching\n}`
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                category: "Behavioral",
+                badgeClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/30",
+                borderClass: "border-purple-500/30",
+                headerBg: "bg-purple-950/20",
+                icon: "workflow",
+                title: "Behavioral coordination & workflow challenges?",
+                subBranches: [
+                    {
+                        question: "Algorithmic variation or conditional choice of algorithm?",
+                        children: [
+                            {
+                                name: "Strategy",
+                                signal: "A method has a large `switch` or `if-else` statement choosing an algorithm based on input parameter or configuration.",
+                                problem: "You have multiple algorithmic variations for performing a specific task and want to swap them dynamically at runtime.",
+                                tradeoffs: "Pros: Eliminates conditional bloat; Open/Closed Principle. Cons: Client must understand and select the right strategy.",
+                                csharpNote: "Often implemented in C# via injected interfaces or simple `Func<T>` delegates.",
+                                code: `// C# Strategy Example\npublic interface ITaxStrategy { decimal Calculate(decimal amount); }\npublic class OrderProcessor {\n    private readonly ITaxStrategy _taxStrategy;\n}`
+                            },
+                            {
+                                name: "Observer",
+                                signal: "Polling loops checking for changes, or domain service directly calling UI elements when updated.",
+                                problem: "Tight coupling between publishers and subscribers requiring notification updates.",
+                                tradeoffs: "Pros: Loose coupling. Cons: Memory leaks if subscribers forget to unsubscribe.",
+                                csharpNote: "Implemented in .NET via C# `event` keyword, `IObservable<T>` (Rx), or `IAsyncEnumerable`.",
+                                code: `// C# Event Observer Example\npublic event EventHandler<OrderPlacedEventArgs> OrderPlaced;`
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        let currentCategoryFilter = 'all';
+        let selectedPatternName = null;
+
+        function renderMindMap() {
+            const container = document.getElementById('categoriesContainer');
+            if (!container) return;
+            
+            const searchInput = document.getElementById('searchInput');
+            const searchVal = searchInput ? searchInput.value.toLowerCase() : '';
+            
+            let html = '';
+
+            decisionTreeData.forEach(cat => {
+                if (currentCategoryFilter !== 'all' && cat.category !== currentCategoryFilter) return;
+
+                let hasVisibleSub = false;
+                let subBranchesHtml = '';
+
+                cat.subBranches.forEach(sb => {
+                    let matchingChildren = sb.children.filter(c => 
+                        c.name.toLowerCase().includes(searchVal) || 
+                        c.signal.toLowerCase().includes(searchVal) || 
+                        c.problem.toLowerCase().includes(searchVal)
+                    );
+
+                    if (searchVal === '' || matchingChildren.length > 0 || sb.question.toLowerCase().includes(searchVal)) {
+                        hasVisibleSub = true;
+                        let targetChildren = searchVal === '' ? sb.children : matchingChildren;
+
+                        subBranchesHtml += `
+                            <div class="relative pl-6 pb-4 border-l-2 border-slate-300 dark:border-slate-700/60 ml-2 group">
+                                <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-800 border-2 border-slate-400 dark:border-slate-600 flex items-center justify-center"></div>
+                                <p class="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2.5 flex items-center gap-2">
+                                    <span class="text-indigo-600 dark:text-indigo-400">↳</span> ${sb.question}
+                                </p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        `;
+
+                        targetChildren.forEach(pat => {
+                            const isSelected = selectedPatternName === pat.name;
+                            subBranchesHtml += `
+                                <div onclick="selectPattern('${pat.name.replace(/'/g, "\\'")}')" 
+                                    class="p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between group/card ${isSelected ? 'bg-indigo-100 dark:bg-indigo-600/20 border-indigo-500 text-slate-900 dark:text-white shadow-md' : 'bg-white dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600 text-slate-700 dark:text-slate-200'}">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2 h-2 rounded-full ${isSelected ? 'bg-indigo-500 dark:bg-indigo-400' : 'bg-slate-400 dark:bg-slate-600 group-hover/card:bg-indigo-500'} transition-colors"></div>
+                                        <span class="text-xs font-medium">${pat.name}</span>
+                                    </div>
+                                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover/card:text-slate-600 dark:group-hover/card:text-slate-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            `;
+                        });
+
+                        subBranchesHtml += `</div></div>`;
+                    }
+                });
+
+                if (searchVal === '' || hasVisibleSub) {
+                    html += `
+                        <div class="bg-slate-50 dark:bg-[#131c2e] border ${cat.borderClass} rounded-2xl p-5 shadow-sm relative transition-all">
+                            <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-200 dark:border-slate-800">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-2 rounded-lg ${cat.headerBg}">
+                                        <span class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">#</span>
+                                    </div>
+                                    <h3 class="font-bold text-base text-slate-800 dark:text-slate-100">${cat.category} Patterns</h3>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${cat.badgeClass}">${cat.category}</span>
+                            </div>
+                            <div class="space-y-4 pt-2">
+                                ${subBranchesHtml}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html || `<div class="text-center py-12 text-slate-500">No matching patterns found for "${searchVal}".</div>`;
+        }
+
+        function setCategoryFilter(category) {
+            currentCategoryFilter = category;
+            ['all', 'Creational', 'Structural', 'Behavioral'].forEach(cat => {
+                const btn = document.getElementById(`filter-${cat}`);
+                if (btn) {
+                    if (cat === category) {
+                        btn.className = 'px-3 py-1 text-xs font-medium rounded-md bg-indigo-600 text-white transition-all shadow-sm';
+                    } else {
+                        btn.className = 'px-3 py-1 text-xs font-medium rounded-md text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-all';
+                    }
+                }
+            });
+            renderMindMap();
+        }
+
+        function filterPatterns() {
+            renderMindMap();
+        }
+
+        function findPattern(name) {
+            for (let cat of decisionTreeData) {
+                for (let sb of cat.subBranches) {
+                    for (let pat of sb.children) {
+                        if (pat.name === name) {
+                            return { pattern: pat, category: cat.category, badgeClass: cat.badgeClass };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        function selectPattern(name) {
+            selectedPatternName = name;
+            renderMindMap();
+
+            const match = findPattern(name);
+            if (!match) return;
+
+            const { pattern, category, badgeClass } = match;
+            
+            const categoryBadge = document.getElementById('inspectorCategoryBadge');
+            const titleEl = document.getElementById('inspectorTitle');
+            const inspectorContent = document.getElementById('inspectorContent');
+
+            if (categoryBadge) {
+                categoryBadge.className = `px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider ${badgeClass}`;
+                categoryBadge.innerText = category;
+            }
+            if (titleEl) {
+                titleEl.innerText = pattern.name;
+            }
+
+            if (inspectorContent) {
+                inspectorContent.innerHTML = `
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="flex items-center space-x-2 text-indigo-600 dark:text-indigo-400 font-semibold text-xs uppercase tracking-wider">
+                            <span>Underlying Problem</span>
+                        </div>
+                        <p class="text-slate-700 dark:text-slate-300 text-xs leading-relaxed">${pattern.problem}</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="flex items-center space-x-2 text-sky-600 dark:text-sky-400 font-semibold text-xs uppercase tracking-wider">
+                            <span>Recognition Signal</span>
+                        </div>
+                        <p class="text-slate-700 dark:text-slate-300 text-xs leading-relaxed italic">"${pattern.signal}"</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="flex items-center space-x-2 text-emerald-600 dark:text-emerald-400 font-semibold text-xs uppercase tracking-wider">
+                            <span>Trade-offs & .NET Context</span>
+                        </div>
+                        <p class="text-slate-700 dark:text-slate-300 text-xs leading-relaxed">${pattern.tradeoffs}</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-xs mt-2 pt-2 border-t border-slate-200 dark:border-slate-800"><strong class="text-slate-800 dark:text-slate-200">.NET Tip:</strong> ${pattern.csharpNote}</p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+                        <div class="bg-slate-950 px-4 py-2 border-b border-slate-800 flex items-center justify-between text-xs text-slate-400 font-mono">
+                            <span>C# Snippet</span>
+                            <span class="text-[10px] text-indigo-400 uppercase tracking-widest">Code</span>
+                        </div>
+                        <pre class="p-4 text-xs font-mono text-indigo-200 overflow-x-auto leading-relaxed"><code>${escapeHtml(pattern.code)}</code></pre>
+                    </div>
+                `;
+            }
+        }
+
+        // Simple node selector helper for simplified mindmap nodes
+        function selectMindmapNode(type) {
+            const detail = document.getElementById('mindmap-detail');
+            if (!detail) return;
+            const detailsMap = {
+                event: 'Selected: Event-Driven Pattern. Guarantees loose coupling and high resilience through asynchronous broker queues (Kafka / RabbitMQ).',
+                resilience: 'Selected: Resilience Pattern. Implements circuit breakers, retries, and bulkhead isolation to prevent cascade failures.',
+                storage: 'Selected: CQRS & Event Sourcing. Separates read models from write command handlers for optimized query performance.'
+            };
+            detail.textContent = detailsMap[type] || 'Node details loaded.';
+            detail.className = 'w-full max-w-xl p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/50 text-xs text-indigo-700 dark:text-indigo-300 text-center font-medium animate-pulse';
+            setTimeout(() => {
+                detail.className = 'w-full max-w-xl p-4 rounded-xl bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 text-center';
+            }, 2500);
+        }
+
+        function resetMindmap() {
+            const detail = document.getElementById('mindmap-detail');
+            if (detail) {
+                detail.textContent = 'Mindmap view centered and reset.';
+            }
+            renderMindMap();
+        }
+
+        function closeInspector() {
+            selectedPatternName = null;
+            renderMindMap();
+            const badge = document.getElementById('inspectorCategoryBadge');
+            const titleEl = document.getElementById('inspectorTitle');
+            const inspectorContent = document.getElementById('inspectorContent');
+
+            if (badge) {
+                badge.className = 'hidden';
+                badge.innerText = '';
+            }
+            if (titleEl) titleEl.innerText = 'Select a Pattern';
+            if (inspectorContent) {
+                inspectorContent.innerHTML = `
+                    <div class="text-center py-16 text-slate-500">
+                        <p class="text-sm">Click any pattern node in the decision tree above to inspect its C# practical problem, recognition signal, and trade-offs.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function updateSim() {
+            const rpsInput = document.getElementById('sim-rps');
+            if (!rpsInput) return;
+            const rps = rpsInput.value;
+            const rpsValEl = document.getElementById('sim-rps-val');
+            if (rpsValEl) rpsValEl.textContent = Number(rps).toLocaleString() + ' RPS';
+            
+            const bwEl = document.getElementById('sim-bw');
+            if (bwEl) bwEl.textContent = (rps * 0.005).toFixed(1) + ' MB/s';
+            
+            const shardsEl = document.getElementById('sim-shards');
+            if (shardsEl) shardsEl.textContent = Math.ceil(rps / 2500) + ' Nodes';
+        }
+
+        window.onload = function() {
+            initTheme();
+            switchTab('blog');
+            renderMindMap();
+        };
+    </script>
+</body>
 </html>
