@@ -31,7 +31,7 @@
     <!-- Header / Navbar -->
     <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-[#131c2e]/80 border-b border-slate-200 dark:border-slate-800 transition-theme">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('blog')">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-indigo-500/20">
                     0x
                 </div>
@@ -42,7 +42,8 @@
             
             <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
                 <button onclick="switchTab('blog')" id="nav-blog" class="text-indigo-600 dark:text-indigo-400 font-semibold transition-colors">Articles</button>
-                <button onclick="switchTab('mindmap')" id="nav-mindmap" class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Architecture Blueprints</button>
+                <button onclick="switchTab('mindmap')" id="nav-mindmap" class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Design Patterns</button>
+                <button onclick="switchTab('author')" id="nav-author" class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Author</button>
                 <button onclick="switchTab('interactive')" id="nav-interactive" class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Playground</button>
             </nav>
 
@@ -59,7 +60,7 @@
                     </svg>
                 </button>
                 <button onclick="switchTab('mindmap')" class="hidden sm:inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md shadow-indigo-500/20 transition-all">
-                    Explore Blueprints
+                    Design Patterns
                 </button>
             </div>
         </div>
@@ -129,45 +130,70 @@
 
         <!-- MIND MAP TAB -->
         <section id="tab-mindmap" class="hidden space-y-6">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#131c2e] p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
                 <div>
-                    <h2 class="text-2xl font-bold tracking-tight">Architecture Design Pattern Mind Map</h2>
-                    <p class="text-sm text-slate-600 dark:text-slate-400">Interactive node graph of core distributed systems and design paradigms.</p>
+                    <h2 class="text-2xl font-bold tracking-tight">.NET Design Patterns Decision Map</h2>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Interactive architectural decision tree with practical signals, trade-offs, and C# code snippets.</p>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <button onclick="resetMindmap()" class="px-3.5 py-2 text-xs font-medium bg-white dark:bg-[#131c2e] border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">Reset View</button>
+                <!-- Search and Category Filters -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <input type="text" id="searchInput" placeholder="Search patterns..." oninput="filterPatterns()" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <div class="flex items-center bg-slate-100 dark:bg-slate-900 p-1 rounded-xl">
+                        <button onclick="setCategoryFilter('all')" id="filter-all" class="px-3 py-1 text-xs font-medium rounded-lg bg-indigo-600 text-white transition-all">All</button>
+                        <button onclick="setCategoryFilter('Creational')" id="filter-Creational" class="px-3 py-1 text-xs font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-indigo-600 transition-all">Creational</button>
+                        <button onclick="setCategoryFilter('Structural')" id="filter-Structural" class="px-3 py-1 text-xs font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-indigo-600 transition-all">Structural</button>
+                        <button onclick="setCategoryFilter('Behavioral')" id="filter-Behavioral" class="px-3 py-1 text-xs font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-indigo-600 transition-all">Behavioral</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-white dark:bg-[#131c2e] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm relative overflow-hidden h-[600px] flex flex-col items-center justify-center">
-                <!-- Interactive Mindmap canvas simulation -->
-                <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] opacity-60"></div>
-                
-                <div class="relative z-10 w-full h-full flex flex-col items-center justify-center space-y-12">
-                    <div class="px-6 py-3 rounded-2xl bg-indigo-600 text-white font-bold shadow-lg shadow-indigo-500/20 text-center">
-                        Distributed Architecture Core
-                    </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Categories & Tree -->
+                <div class="lg:col-span-7 space-y-6" id="categoriesContainer">
+                    <!-- Javascript populated -->
+                </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-4xl px-4">
-                        <div onclick="selectMindmapNode('event')" class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-indigo-500 transition-all space-y-2">
-                            <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">Pattern 01</span>
-                            <h3 class="font-bold text-sm">Event-Driven / Kafka</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Asynchronous messaging, outbox pattern, pub-sub architectures.</p>
+                <!-- Pattern Inspector Side Panel -->
+                <div class="lg:col-span-5">
+                    <div id="inspectorPanel" class="bg-white dark:bg-[#131c2e] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sticky top-24 space-y-4">
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+                            <span id="inspectorCategoryBadge" class="hidden"></span>
+                            <h3 id="inspectorTitle" class="text-lg font-bold">Select a Pattern</h3>
+                            <button onclick="closeInspector()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-sm">Clear</button>
                         </div>
-                        <div onclick="selectMindmapNode('resilience')" class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-indigo-500 transition-all space-y-2">
-                            <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">Pattern 02</span>
-                            <h3 class="font-bold text-sm">Resilience & Circuit Breaker</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Bulkhead isolation, retries with jitter, graceful degradation.</p>
-                        </div>
-                        <div onclick="selectMindmapNode('storage')" class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-indigo-500 transition-all space-y-2">
-                            <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">Pattern 03</span>
-                            <h3 class="font-bold text-sm">CQRS & Event Sourcing</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Separating read/write models, append-only event logs.</p>
+                        <div id="inspectorContent" class="space-y-4">
+                            <div class="text-center py-12 text-slate-500 dark:text-slate-400 text-sm">
+                                Click any pattern node in the decision tree to inspect its practical problem, recognition signal, trade-offs, and C# code.
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
 
-                    <div id="mindmap-detail" class="w-full max-w-xl p-4 rounded-xl bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 text-center">
-                        Click any architecture pattern node above to inspect its properties and blueprint specs.
+        <!-- AUTHOR PROFILE TAB -->
+        <section id="tab-author" class="hidden space-y-8">
+            <div class="bg-white dark:bg-[#131c2e] border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm">
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+                    <div class="w-32 h-32 rounded-3xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center text-white font-extrabold text-4xl shadow-xl shadow-indigo-500/30 flex-shrink-0">
+                        0x
+                    </div>
+                    <div class="space-y-4 text-center md:text-left flex-grow">
+                        <div>
+                            <span class="px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-full">Principal Systems Architect</span>
+                            <h1 class="text-3xl font-extrabold tracking-tight mt-2">Alex Mercer (0xARCH)</h1>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">Specializing in High-Throughput Distributed Systems, Microservices, and Cloud Infrastructure</p>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
+                            Over 12+ years of experience engineering high-volume backend platforms, real-time streaming architectures, and distributed databases. Passionate about clean domain modeling, resilience patterns, and mentoring engineering teams.
+                        </p>
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
+                            <span class="px-3 py-1 text-xs rounded-xl bg-slate-100 dark:bg-slate-800 font-medium">C# / .NET Core</span>
+                            <span class="px-3 py-1 text-xs rounded-xl bg-slate-100 dark:bg-slate-800 font-medium">Apache Kafka</span>
+                            <span class="px-3 py-1 text-xs rounded-xl bg-slate-100 dark:bg-slate-800 font-medium">Kubernetes</span>
+                            <span class="px-3 py-1 text-xs rounded-xl bg-slate-100 dark:bg-slate-800 font-medium">Distributed Systems</span>
+                            <span class="px-3 py-1 text-xs rounded-xl bg-slate-100 dark:bg-slate-800 font-medium">Event Sourcing</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -217,7 +243,7 @@
     <script>
         // Tab / Navigation Switching Function
         function switchTab(tabName) {
-            const tabs = ['blog', 'mindmap', 'interactive'];
+            const tabs = ['blog', 'mindmap', 'author', 'interactive'];
             tabs.forEach(t => {
                 const section = document.getElementById(`tab-${t}`);
                 const navBtn = document.getElementById(`nav-${t}`);
@@ -234,20 +260,14 @@
                 }
             });
 
-            // Trigger mindmap render when switching to mindmap tab
-            if (tabName === 'mindmap' && typeof renderMindMap === 'function') {
-                setTimeout(() => renderMindMap(), 50);
+            if (tabName === 'mindmap') {
+                renderMindMap();
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Alias navigateTo to switchTab for backwards compatibility
-        function navigateTo(tabName) {
-            switchTab(tabName);
-        }
-
-        // Initialize Theme from localStorage or system preference
+        // Initialize Theme
         function initTheme() {
             const savedTheme = localStorage.getItem('theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -259,52 +279,51 @@
             }
         }
 
-        // Toggle Theme Function
+        // Toggle Theme
         function toggleTheme() {
             const isDark = document.documentElement.classList.toggle('dark');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         }
 
+        // Design Patterns Data
         const decisionTreeData = [
             {
                 category: "Creational",
                 badgeClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30",
                 borderClass: "border-emerald-500/30",
                 headerBg: "bg-emerald-950/20",
-                icon: "sparkles",
-                title: "Object creation becoming complicated?",
                 subBranches: [
                     {
-                        question: "Need to hide concrete class instantiation or delegate creation?",
+                        question: "Hide concrete class instantiation or delegate creation?",
                         children: [
                             {
                                 name: "Factory Method",
-                                signal: "Code using `new ConcreteProduct()` scattered across business logic or massive switch statements checking enums/configs.",
-                                problem: "Creation logic is tied to concrete classes, making it hard to extend object creation without modifying existing client code.",
+                                signal: "Code using `new ConcreteProduct()` scattered across business logic or massive switch statements.",
+                                problem: "Creation logic is tied to concrete classes, making it hard to extend object creation without modifying existing code.",
                                 tradeoffs: "Pros: Decouples client code. Cons: Forces subclassing or factory delegates; increases class count.",
                                 csharpNote: "In modern .NET, often superseded by DI containers and factory delegates (`Func<T>`).",
-                                code: `// C# Factory Method Example\npublic interface IReport\n{\n    void Generate();\n}\n\npublic abstract class ReportCreator\n{\n    public abstract IReport CreateReport();\n    public void Render() {\n        var report = CreateReport();\n        report.Generate();\n    }\n}`
+                                code: `public interface IReport\n{\n    void Generate();\n}\n\npublic abstract class ReportCreator\n{\n    public abstract IReport CreateReport();\n    public void Render() {\n        var report = CreateReport();\n        report.Generate();\n    }\n}`
                             },
                             {
                                 name: "Abstract Factory",
-                                signal: "Need to guarantee that a set of instantiated objects work together harmoniously (e.g., Windows vs Mac UI themes).",
-                                problem: "Clients need to create families of related or dependent objects without hardcoding their concrete classes.",
-                                tradeoffs: "Pros: Ensures product consistency. Cons: Extremely rigid; adding a new product type requires changing the abstract factory and all subclasses.",
-                                csharpNote: "Common in cross-platform rendering engines or abstracted multi-database providers.",
-                                code: `// C# Abstract Factory Example\npublic interface IGUIFactory\n{\n    IButton CreateButton();\n    ICheckbox CreateCheckbox();\n}`
+                                signal: "Need to guarantee that a set of instantiated objects work together harmoniously.",
+                                problem: "Clients need to create families of related objects without hardcoding concrete classes.",
+                                tradeoffs: "Pros: Ensures product consistency. Cons: Rigid; adding a product type requires changing all subclasses.",
+                                csharpNote: "Common in cross-platform rendering engines or database provider abstractions.",
+                                code: `public interface IGUIFactory\n{\n    IButton CreateButton();\n    ICheckbox CreateCheckbox();\n}`
                             }
                         ]
                     },
                     {
-                        question: "Object requires step-by-step assembly or has massive optional parameters?",
+                        question: "Step-by-step assembly or massive optional parameters?",
                         children: [
                             {
                                 name: "Builder",
-                                signal: "Class constructor has 6+ parameters (many nullable/optional) or object construction requires sequential phases.",
-                                problem: "Telescoping constructors make code unreadable and error-prone when dealing with complex optional configurations.",
-                                tradeoffs: "Pros: Readability, immutable final objects, fluent APIs. Cons: Requires writing/maintaining separate builder class or record `with` expressions.",
+                                signal: "Class constructor has 6+ parameters or requires sequential phases.",
+                                problem: "Telescoping constructors make code unreadable and error-prone.",
+                                tradeoffs: "Pros: Readability, immutable objects, fluent APIs. Cons: Requires separate builder class.",
                                 csharpNote: "Extensively used in C# via Fluent APIs (`HttpClientBuilder`, `WebApplicationBuilder`).",
-                                code: `// C# Builder Example\nvar request = new HttpRequestBuilder()\n    .WithUrl("https://api.com")\n    .WithTimeout(TimeSpan.FromSeconds(30))\n    .Build();`
+                                code: `var request = new HttpRequestBuilder()\n    .WithUrl("https://api.com")\n    .WithTimeout(TimeSpan.FromSeconds(30))\n    .Build();`
                             }
                         ]
                     }
@@ -315,27 +334,25 @@
                 badgeClass: "bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/30",
                 borderClass: "border-sky-500/30",
                 headerBg: "bg-sky-950/20",
-                icon: "layers",
-                title: "Structural integration & class organization issues?",
                 subBranches: [
                     {
-                        question: "Integrating a legacy or third-party class with an incompatible interface?",
+                        question: "Integrating legacy or third-party class with an incompatible interface?",
                         children: [
                             {
                                 name: "Adapter",
-                                signal: "You have a `ThirdPartyClient` with `MakeCharge()` but your codebase expects `IPaymentProcessor.ProcessPayment()`.",
-                                problem: "An existing class or third-party library doesn't match what your domain code expects.",
-                                tradeoffs: "Pros: Reusability without modifying legacy code. Cons: Adds an extra indirection layer and boilerplate wrapper classes.",
+                                signal: "`ThirdPartyClient` has `MakeCharge()` but codebase expects `IPaymentProcessor.ProcessPayment()`.",
+                                problem: "An existing class doesn't match what your domain code expects.",
+                                tradeoffs: "Pros: Reusability without modifying legacy code. Cons: Adds extra indirection layer.",
                                 csharpNote: "Common when integrating legacy WCF services or external REST wrappers.",
-                                code: `// C# Adapter Example\npublic class StripeAdapter : IPaymentProcessor\n{\n    private readonly StripeClient _stripe;\n    public void ProcessPayment(PaymentRequest req) => _stripe.Charge(req.Amount);\n}`
+                                code: `public class StripeAdapter : IPaymentProcessor\n{\n    private readonly StripeClient _stripe;\n    public void ProcessPayment(PaymentRequest req) => _stripe.Charge(req.Amount);\n}`
                             },
                             {
                                 name: "Decorator",
-                                signal: "You find yourself writing subclasses like `LoggedCachedSecuredRepository` for every combination.",
-                                problem: "Adding responsibilities to individual objects statically via subclassing creates an unmaintainable class explosion.",
-                                tradeoffs: "Pros: Highly composable behaviors adhering to Open/Closed Principle. Cons: Debugging deep wrapper stacks is painful.",
-                                csharpNote: "Widely used in ASP.NET Core middleware, Scrutor service decoration, and stream wrappers.",
-                                code: `// C# Decorator Example\npublic class CachedUserRepository : IUserRepository\n{\n    private readonly IUserRepository _inner;\n    private readonly IMemoryCache _cache;\n    // Wraps execution with caching\n}`
+                                signal: "Writing subclasses like `LoggedCachedSecuredRepository` for every combination.",
+                                problem: "Adding responsibilities statically creates an unmaintainable class explosion.",
+                                tradeoffs: "Pros: Highly composable behaviors. Cons: Debugging deep wrapper stacks is difficult.",
+                                csharpNote: "Widely used in ASP.NET Core middleware and Scrutor service decoration.",
+                                code: `public class CachedUserRepository : IUserRepository\n{\n    private readonly IUserRepository _inner;\n    private readonly IMemoryCache _cache;\n    // Wraps execution with caching\n}`
                             }
                         ]
                     }
@@ -346,27 +363,25 @@
                 badgeClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/30",
                 borderClass: "border-purple-500/30",
                 headerBg: "bg-purple-950/20",
-                icon: "workflow",
-                title: "Behavioral coordination & workflow challenges?",
                 subBranches: [
                     {
-                        question: "Algorithmic variation or conditional choice of algorithm?",
+                        question: "Algorithmic variation or dynamic strategy switching?",
                         children: [
                             {
                                 name: "Strategy",
-                                signal: "A method has a large `switch` or `if-else` statement choosing an algorithm based on input parameter or configuration.",
-                                problem: "You have multiple algorithmic variations for performing a specific task and want to swap them dynamically at runtime.",
-                                tradeoffs: "Pros: Eliminates conditional bloat; Open/Closed Principle. Cons: Client must understand and select the right strategy.",
-                                csharpNote: "Often implemented in C# via injected interfaces or simple `Func<T>` delegates.",
-                                code: `// C# Strategy Example\npublic interface ITaxStrategy { decimal Calculate(decimal amount); }\npublic class OrderProcessor {\n    private readonly ITaxStrategy _taxStrategy;\n}`
+                                signal: "A method has a large switch/if-else statement choosing an algorithm based on inputs.",
+                                problem: "Multiple algorithm variations for performing a task that need runtime swapping.",
+                                tradeoffs: "Pros: Eliminates conditional bloat; Open/Closed Principle. Cons: Client must pick strategy.",
+                                csharpNote: "Often implemented in C# via injected interfaces or `Func<T>` delegates.",
+                                code: `public interface ITaxStrategy { decimal Calculate(decimal amount); }\npublic class OrderProcessor {\n    private readonly ITaxStrategy _taxStrategy;\n}`
                             },
                             {
                                 name: "Observer",
-                                signal: "Polling loops checking for changes, or domain service directly calling UI elements when updated.",
+                                signal: "Polling loops or direct tight coupling between publishers and dependent subscribers.",
                                 problem: "Tight coupling between publishers and subscribers requiring notification updates.",
-                                tradeoffs: "Pros: Loose coupling. Cons: Memory leaks if subscribers forget to unsubscribe.",
-                                csharpNote: "Implemented in .NET via C# `event` keyword, `IObservable<T>` (Rx), or `IAsyncEnumerable`.",
-                                code: `// C# Event Observer Example\npublic event EventHandler<OrderPlacedEventArgs> OrderPlaced;`
+                                tradeoffs: "Pros: Loose coupling. Cons: Potential memory leaks if subscribers do not unsubscribe.",
+                                csharpNote: "Implemented in .NET via C# `event` keyword, `IObservable<T>`, or `IAsyncEnumerable`.",
+                                code: `public event EventHandler<OrderPlacedEventArgs> OrderPlaced;`
                             }
                         ]
                     }
@@ -404,8 +419,7 @@
                         let targetChildren = searchVal === '' ? sb.children : matchingChildren;
 
                         subBranchesHtml += `
-                            <div class="relative pl-6 pb-4 border-l-2 border-slate-300 dark:border-slate-700/60 ml-2 group">
-                                <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-800 border-2 border-slate-400 dark:border-slate-600 flex items-center justify-center"></div>
+                            <div class="relative pl-6 pb-4 border-l-2 border-slate-300 dark:border-slate-700/60 ml-2">
                                 <p class="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2.5 flex items-center gap-2">
                                     <span class="text-indigo-600 dark:text-indigo-400">↳</span> ${sb.question}
                                 </p>
@@ -416,12 +430,12 @@
                             const isSelected = selectedPatternName === pat.name;
                             subBranchesHtml += `
                                 <div onclick="selectPattern('${pat.name.replace(/'/g, "\\'")}')" 
-                                    class="p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between group/card ${isSelected ? 'bg-indigo-100 dark:bg-indigo-600/20 border-indigo-500 text-slate-900 dark:text-white shadow-md' : 'bg-white dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600 text-slate-700 dark:text-slate-200'}">
+                                    class="p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${isSelected ? 'bg-indigo-100 dark:bg-indigo-600/20 border-indigo-500 text-slate-900 dark:text-white shadow-md' : 'bg-white dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 hover:border-slate-400 text-slate-700 dark:text-slate-200'}">
                                     <div class="flex items-center gap-2.5">
-                                        <div class="w-2 h-2 rounded-full ${isSelected ? 'bg-indigo-500 dark:bg-indigo-400' : 'bg-slate-400 dark:bg-slate-600 group-hover/card:bg-indigo-500'} transition-colors"></div>
+                                        <div class="w-2 h-2 rounded-full ${isSelected ? 'bg-indigo-500' : 'bg-slate-400'}"></div>
                                         <span class="text-xs font-medium">${pat.name}</span>
                                     </div>
-                                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover/card:text-slate-600 dark:group-hover/card:text-slate-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                    <span class="text-xs text-slate-400">&rarr;</span>
                                 </div>
                             `;
                         });
@@ -432,14 +446,9 @@
 
                 if (searchVal === '' || hasVisibleSub) {
                     html += `
-                        <div class="bg-slate-50 dark:bg-[#131c2e] border ${cat.borderClass} rounded-2xl p-5 shadow-sm relative transition-all">
-                            <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-200 dark:border-slate-800">
-                                <div class="flex items-center space-x-3">
-                                    <div class="p-2 rounded-lg ${cat.headerBg}">
-                                        <span class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">#</span>
-                                    </div>
-                                    <h3 class="font-bold text-base text-slate-800 dark:text-slate-100">${cat.category} Patterns</h3>
-                                </div>
+                        <div class="bg-white dark:bg-[#131c2e] border ${cat.borderClass} rounded-2xl p-5 shadow-sm space-y-4">
+                            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                                <h3 class="font-bold text-base">${cat.category} Patterns</h3>
                                 <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${cat.badgeClass}">${cat.category}</span>
                             </div>
                             <div class="space-y-4 pt-2">
@@ -459,9 +468,9 @@
                 const btn = document.getElementById(`filter-${cat}`);
                 if (btn) {
                     if (cat === category) {
-                        btn.className = 'px-3 py-1 text-xs font-medium rounded-md bg-indigo-600 text-white transition-all shadow-sm';
+                        btn.className = 'px-3 py-1 text-xs font-medium rounded-lg bg-indigo-600 text-white transition-all';
                     } else {
-                        btn.className = 'px-3 py-1 text-xs font-medium rounded-md text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-all';
+                        btn.className = 'px-3 py-1 text-xs font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-indigo-600 transition-all';
                     }
                 }
             });
@@ -508,24 +517,18 @@
 
             if (inspectorContent) {
                 inspectorContent.innerHTML = `
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-2">
-                        <div class="flex items-center space-x-2 text-indigo-600 dark:text-indigo-400 font-semibold text-xs uppercase tracking-wider">
-                            <span>Underlying Problem</span>
-                        </div>
+                    <div class="bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-2">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-semibold text-xs uppercase tracking-wider">Underlying Problem</span>
                         <p class="text-slate-700 dark:text-slate-300 text-xs leading-relaxed">${pattern.problem}</p>
                     </div>
 
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-2">
-                        <div class="flex items-center space-x-2 text-sky-600 dark:text-sky-400 font-semibold text-xs uppercase tracking-wider">
-                            <span>Recognition Signal</span>
-                        </div>
+                    <div class="bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-2">
+                        <span class="text-sky-600 dark:text-sky-400 font-semibold text-xs uppercase tracking-wider">Recognition Signal</span>
                         <p class="text-slate-700 dark:text-slate-300 text-xs leading-relaxed italic">"${pattern.signal}"</p>
                     </div>
 
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-2">
-                        <div class="flex items-center space-x-2 text-emerald-600 dark:text-emerald-400 font-semibold text-xs uppercase tracking-wider">
-                            <span>Trade-offs & .NET Context</span>
-                        </div>
+                    <div class="bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-2">
+                        <span class="text-emerald-600 dark:text-emerald-400 font-semibold text-xs uppercase tracking-wider">Trade-offs & .NET Context</span>
                         <p class="text-slate-700 dark:text-slate-300 text-xs leading-relaxed">${pattern.tradeoffs}</p>
                         <p class="text-slate-500 dark:text-slate-400 text-xs mt-2 pt-2 border-t border-slate-200 dark:border-slate-800"><strong class="text-slate-800 dark:text-slate-200">.NET Tip:</strong> ${pattern.csharpNote}</p>
                     </div>
@@ -533,36 +536,11 @@
                     <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
                         <div class="bg-slate-950 px-4 py-2 border-b border-slate-800 flex items-center justify-between text-xs text-slate-400 font-mono">
                             <span>C# Snippet</span>
-                            <span class="text-[10px] text-indigo-400 uppercase tracking-widest">Code</span>
                         </div>
                         <pre class="p-4 text-xs font-mono text-indigo-200 overflow-x-auto leading-relaxed"><code>${escapeHtml(pattern.code)}</code></pre>
                     </div>
                 `;
             }
-        }
-
-        // Simple node selector helper for simplified mindmap nodes
-        function selectMindmapNode(type) {
-            const detail = document.getElementById('mindmap-detail');
-            if (!detail) return;
-            const detailsMap = {
-                event: 'Selected: Event-Driven Pattern. Guarantees loose coupling and high resilience through asynchronous broker queues (Kafka / RabbitMQ).',
-                resilience: 'Selected: Resilience Pattern. Implements circuit breakers, retries, and bulkhead isolation to prevent cascade failures.',
-                storage: 'Selected: CQRS & Event Sourcing. Separates read models from write command handlers for optimized query performance.'
-            };
-            detail.textContent = detailsMap[type] || 'Node details loaded.';
-            detail.className = 'w-full max-w-xl p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/50 text-xs text-indigo-700 dark:text-indigo-300 text-center font-medium animate-pulse';
-            setTimeout(() => {
-                detail.className = 'w-full max-w-xl p-4 rounded-xl bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 text-center';
-            }, 2500);
-        }
-
-        function resetMindmap() {
-            const detail = document.getElementById('mindmap-detail');
-            if (detail) {
-                detail.textContent = 'Mindmap view centered and reset.';
-            }
-            renderMindMap();
         }
 
         function closeInspector() {
@@ -572,15 +550,12 @@
             const titleEl = document.getElementById('inspectorTitle');
             const inspectorContent = document.getElementById('inspectorContent');
 
-            if (badge) {
-                badge.className = 'hidden';
-                badge.innerText = '';
-            }
+            if (badge) badge.className = 'hidden';
             if (titleEl) titleEl.innerText = 'Select a Pattern';
             if (inspectorContent) {
                 inspectorContent.innerHTML = `
-                    <div class="text-center py-16 text-slate-500">
-                        <p class="text-sm">Click any pattern node in the decision tree above to inspect its C# practical problem, recognition signal, and trade-offs.</p>
+                    <div class="text-center py-12 text-slate-500 dark:text-slate-400 text-sm">
+                        Click any pattern node in the decision tree to inspect its practical problem, recognition signal, trade-offs, and C# code.
                     </div>
                 `;
             }
@@ -607,7 +582,6 @@
         window.onload = function() {
             initTheme();
             switchTab('blog');
-            renderMindMap();
         };
     </script>
 </body>
